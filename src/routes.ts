@@ -34,7 +34,7 @@ export async function appRoutes ( app : FastifyInstance) {
             date: z.coerce.date()
         });
 
-        const { date } = getDayParams.parse(request.params);
+        const { date } = getDayParams.parse(request.query);
 
         const parsedDate = dayjs(date).startOf('day');
         // Pega o dia da semana
@@ -68,7 +68,7 @@ export async function appRoutes ( app : FastifyInstance) {
 
         const completedHabits = day?.dayHabits.map(dayHabit => {
             return dayHabit.habit_id
-        });
+        }) ?? [];
 
         return {
             possibleHabits,
@@ -77,7 +77,7 @@ export async function appRoutes ( app : FastifyInstance) {
     });
 
     // toogle habit
-    app.patch('/habits/:id/toogle',async (request) => {
+    app.patch('/habits/:id/toggle',async (request) => {
         
         const toggleHabitParams = z.object({
             id: z.string().uuid()
